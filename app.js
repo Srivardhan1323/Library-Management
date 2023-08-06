@@ -13,9 +13,6 @@ mongoose.connect(dbURL)
     console.log(err)
 })
 
-
-
-
 app.listen(3000,()=>{
     console.log('LISTENING AT PORT 3000')
 })
