@@ -1,0 +1,18 @@
+<% layout('layouts/boilerplate') %>
+
+<form action="/addbook" method="post">
+    <label for="title">BookTitle</label>
+    <input type="text" name="title">
+    <label for="author">BookAuthor</label>
+    <input type="text" name="author">
+    <label for="genre"></label>
+        <select name="genre" id="">
+            <option value="Romance">Romance</option>
+            <option value="Technology">Technology</option>
+            <option value="Romance">Romance</option>
+            <option value="Romance">Romance</option>
+        </select>
+    <label for="yop"></label>
+    <input type="number" name="yop" id="">
+    <button>Add book</button>
+</form>

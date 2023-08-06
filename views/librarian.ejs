@@ -1,0 +1,23 @@
+<%layout('layouts/boilerplate') %>
+
+
+  <% for(student of allStudents){ %>
+       
+        <h1><%=student.name%> </h1>
+        <!-- <% for(book of student.book){ %>
+            
+           <h5> <%=book%></h5>
+        <% } %> -->
+        <% if (student.book.length === 0) { %>
+            <p>No books taken by this student.</p>
+          <% } else { %>
+            <ul>
+              <% student.book.forEach(book => { %>
+                <li><%= book.title %> by <%= book.author %></li>
+                 <form action="/librarian/<%=student._id %>/<%=book._id%>?_method=DELETE" method="POST"><button>Delete</button></form>
+              <% }) %>
+            </ul>
+          <% } %>
+
+
+  <% } %>

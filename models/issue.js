@@ -1,6 +1,8 @@
 const mongoose=require('mongoose')
 const issueSchema=new mongoose.Schema({
-    student:{
+   
+
+   student:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Student",
         required:true
@@ -14,6 +16,7 @@ const issueSchema=new mongoose.Schema({
         type:Boolean,
         default:false
     }
+   
 })
 
 module.exports=mongoose.model("Issue",issueSchema)
