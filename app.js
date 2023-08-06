@@ -53,8 +53,6 @@ app.post('/issue',async(req,res)=>{
     })
 
     await newIssue.save();
-    console.log(newIssue);
-
     const id=student.admNo;
     res.redirect(`/student/${student.admNo}`);
 })
@@ -69,42 +67,18 @@ app.delete('/librarian/:student/:book_id',async(req,res)=>{
   
       const {student,book_id} = req.params;
       const st = await Student.findOne({_id:student});
-     
-   
-
-   const index = st.book.indexOf(book_id);
-
-if (index !== -1) {
-  st.book.splice(index, 1);
-}
-   await st.save();
-   res.redirect('/librarian');
-
+      const index = st.book.indexOf(book_id);
+      st.book.splice(index, 1);
+      await st.save();
+      res.redirect('/librarian');
 })
 app.get('/addbook',async(req,res)=>{
-           const book=req.params;
-        //    const newbook = new Book({
-        //          title:book.title,
-        //          author:book.author,
-        //          genre:book.genre,
-        //          yop:book.yop
-        //    })
-
-        //    await newbook.save();
-           res.render('addbook');
+    res.render('addbook');
 })
 app.post('/addbook',async(req,res)=>{
-    const book=new Book(req.body);
-    console.log(book);
-    //    const newbook = new Book({
-    //          title:book.title,
-    //          author:book.author,
-    //          genre:book.genre,
-    //          yop:book.yop
-    //    })
-
+       const book=new Book(req.body);
        await book.save();
-       res.send(req.body);
+       res.redirect('/addbook');
 })
 
 app.get('/addstudent',async(req,res)=>{
