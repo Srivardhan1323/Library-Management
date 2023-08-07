@@ -28,6 +28,13 @@ app.set('views',path.join(__dirname,'views'))
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
 
+
+app.get('/allbooks',async(req,res)=>{
+        const allbooks = await Book.find({});
+        res.render('allbooks');
+})
+
+
 app.get('/student/:id',async(req,res)=>{
          const {id} = req.params;
 
@@ -45,7 +52,15 @@ app.post('/issue',async(req,res)=>{
     const book=await(await Book.findOne({title:`${booktitle}`}));
     await student.book.push(book)
     await student.save()
-   
+     const copies = book.copies;
+     book.copies = copies-1;
+     
+         await book.save();
+     
+
+     
+
+     console.log(book);
     const newIssue = new Issue({
         student : student,
         book    : book,
