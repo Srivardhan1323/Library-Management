@@ -1,0 +1,19 @@
+<%layout('layouts/boilerplate') %>
+
+<% if(student.book.length===0){ %>
+              <h1>No Books Taken</h1>
+  <% }else{ %>  
+           <h1>Total books taken : <%= student.book.length %></h1>
+               <% for(book of student.book){ %>
+                   <h2><%=book.title%></h2>
+                        <ul>
+                                <li> <h4><%=book.author%></h4></li>
+                                <li> <h4><%=book.genre%></h4></li>
+                                <li> <h4><%=book.yop%></h4></li>
+                            
+                        </ul>
+
+               <% } %>
+   
+
+<% } %>

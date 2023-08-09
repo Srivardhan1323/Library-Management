@@ -1,0 +1,17 @@
+<%layout('layouts/boilerplate') %>
+
+
+  <% for(book of allbooks){ %>
+    <% if (book.copies!=0) { %>
+        <h2><%=book.title%></h2>
+        <ul>
+           <li> <h4><%=book.author%></h4></li>
+           <li> <h4><%=book.genre%></h4></li>
+           <li> <h4><%=book.yop%></h4></li>
+           <li> <h4><%=book.copies%></h4></li>
+        </ul>
+        <form action="/issue/<%=book.title%>" method="get">
+            <button>Issue</button>
+        </form>
+    <% } %>
+    <% } %>
