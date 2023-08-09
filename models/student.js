@@ -12,6 +12,22 @@ const studentSchema=new mongoose.Schema({
         type:String,
         required:true
     },
+     
+    email:{
+         type:String,
+         required:true
+    },
+    dep:{
+        type:String,
+        enum: ['Computer Science',
+               'Electronics',
+               'Mechanical',
+               'Civil',
+               'Mining',
+               'Petoleum'],
+        required:true
+    },
+    
     book:[
         {
         type:mongoose.Schema.Types.ObjectId,
