@@ -28,6 +28,13 @@ app.set('views',path.join(__dirname,'views'))
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
 
+
+app.get('/allbooks',async(req,res)=>{
+        const allbooks = await Book.find({});
+        res.render('allbooks');
+})
+
+
 app.get('/student/:id',async(req,res)=>{
          const {id} = req.params;
 
@@ -56,6 +63,7 @@ app.post('/issue',async(req,res)=>{
     book.copies--;
     await book.save()
     await student.save()
+   
     const newIssue = new Issue({
         student : student,
         book    : book,
