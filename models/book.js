@@ -16,6 +16,9 @@ const bookSchema=new mongoose.Schema({
     yop:{
         type:Number,
         required:true
+    },
+    copies:{
+        type:Number
     }
 })
 module.exports=mongoose.model('Book',bookSchema);

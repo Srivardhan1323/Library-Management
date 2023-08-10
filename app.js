@@ -31,31 +31,31 @@ app.use(methodOverride('_method'));
 
 app.get('/allbooks',async(req,res)=>{
         const allbooks = await Book.find({});
-        res.render('allbooks');
+        res.render('allbooks',{allbooks});
 })
 
 
-app.get('/student/:id',async(req,res)=>{
+app.get('/student/profile/:id',async(req,res)=>{
          const {id} = req.params;
 
         const student = await (await Student.findOne({admNo:`${id}`})).populate('book');
          
-         res.render('student',{student});
+         res.render('student/profile',{student});
      
 })
 
-app.get('/student/:id/books', async(req,res)=>{
+app.get('/student/profile/:id/books', async(req,res)=>{
     const {id} = req.params;
 
     const student = await (await Student.findOne({admNo:`${id}`})).populate('book');
      
-     res.render('showBooks',{student});
+     res.render('student/showBooks',{student});
 })
-app.get('/issue/:title',async(req,res)=>{
+app.get('/librarian/issue/:title',async(req,res)=>{
     const {title} = req.params;
-    res.render('issue',{title});   
+    res.render('librarian/issue',{title});   
 })
-app.post('/issue',async(req,res)=>{
+app.post('/librarian/issue',async(req,res)=>{
     const {stuadmNo,booktitle}=req.body;
     const student=await (await Student.findOne({admNo:`${stuadmNo}`}));
     const book=await(await Book.findOne({title:`${booktitle}`}));
@@ -71,32 +71,36 @@ app.post('/issue',async(req,res)=>{
     })
     await newIssue.save();
     const id=student.admNo;
-    res.redirect(`/student/${student.admNo}/books`);
+    //res.send(book);
+    res.redirect(`/student/profile/${student.admNo}/books`);
 })
 
 
-app.get('/librarian',async(req,res)=>{
+app.get('/librarian/return',async(req,res)=>{
         const allStudents = await Student.find({}).populate('book');
-        res.render('librarian',{allStudents});
+
+        res.render('librarian/return',{allStudents});
 })
 
-app.delete('/librarian/:student/:book_id',async(req,res)=>{
-  
+app.delete('/librarian/return/:student/:book_id',async(req,res)=>{
       const {student,book_id} = req.params;
       const st = await Student.findOne({_id:student});
+      const book=await Book.findOne({_id:book_id});
       const index = st.book.indexOf(book_id);
       st.book.splice(index, 1);
+      book.copies++;
+      await book.save();
       await st.save();
-      res.redirect('/librarian');
+      res.redirect('/librarian/return');
 })
-app.get('/addbook',async(req,res)=>{
+app.get('/librarian/addbook',async(req,res)=>{
     
-    res.render('addbook');
+    res.render('librarian/addbook');
 })
-app.post('/addbook',async(req,res)=>{
+app.post('/librarian/addbook',async(req,res)=>{
        const book=new Book(req.body);
        await book.save();
-       res.redirect('/addbook');
+       res.redirect('librarian/addbook');
 })
 
 app.get('/addstudent',async(req,res)=>{
@@ -112,6 +116,8 @@ app.get('/addstudent',async(req,res)=>{
           await newstudent.save();
            res.send(newstudent);
 })
+
+
 app.get('/allbooks',async(req,res)=>{
     const allbooks=await Book.find({});
     res.render('allbooks',{allbooks});
