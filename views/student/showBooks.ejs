@@ -7,13 +7,9 @@
                <% for(book of student.book){ %>
                    <h2><%=book.title%></h2>
                         <ul>
-                                <li> <h4><%=book.author%></h4></li>
-                                <li> <h4><%=book.genre%></h4></li>
-                                <li> <h4><%=book.yop%></h4></li>
-                            
+                                <li> <h4>Author:<%=book.author%></h4></li>
+                                <li> <h4>Genre:<%=book.genre%></h4></li>
+                                <li> <h4>Year Of publication:<%=book.yop%></h4></li>
                         </ul>
-
                <% } %>
-   
-
 <% } %>
