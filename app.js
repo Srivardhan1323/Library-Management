@@ -3,11 +3,14 @@ const express=require('express')
 const app=express()
 const path = require('path');
 const methodOverride = require('method-override');
-
+const bcrypt=require('bcrypt');
+const session=require('express-session');
 
 const Book=require('./models/book')
 const Student = require('./models/student')
-const Issue = require('./models/issue');
+const Issue = require('./models/issue')
+const Admin=require('./models/admin')
+const User=require('./models/user')
 
 const ejsMate = require('ejs-mate');
 
@@ -27,6 +30,74 @@ app.set('view engine','ejs')
 app.set('views',path.join(__dirname,'views'))
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
+app.use(session({secret:" "}));
+
+
+app.get('/signin',(req,res)=>{
+    if(req.session.user_id) 
+    {
+        return res.redirect('student/profile');
+    }
+
+    res.render('signin');
+})
+app.post('/signin',async(req,res)=>{
+    const {username,password}=req.body;
+    const user=  await User.findOne({ username });
+    if(user==null)
+    {
+        return res.send('<script>alert("Incorrect Username Or Password"); window.location="/signin";</script>');
+        return res.render('signin');
+    }
+    const validpassword= await bcrypt.compare(password,user.password);
+    if(validpassword)
+    {
+            req.session.user_id= user._id;
+            req.session.username=user.username;
+            res.redirect(`student/profile/${user.username}`);
+    }
+    else{
+         return res.send('<script>alert("Incorrect Username Or Password"); window.location="/signin";</script>')
+         res.render('signin');
+    }
+})
+app.get('/admin',async (req,res)=>{
+    res.render('admin');
+})
+app.post('/admin',async (req,res)=>{
+    const {adminname,password}=req.body;    
+    const admin=  await Admin.findOne({ adminname });
+    if(admin==null)
+    {
+        
+        return res.send('<script>alert("Incorrect Adminname Or Password"); window.location="/signin";</script>');
+        return res.render('admin');
+    }
+
+    const validpassword= await bcrypt.compare(password,admin.password);
+    console.log(validpassword)
+    if(validpassword)
+    {
+            req.session.admin_id= admin._id;
+            req.session.adminname=admin.adminname;
+            res.redirect('/allbooks');
+    }
+    else{
+         return res.send('<script>alert("Incorrect Username Or Password"); window.location="/signin";</script>')
+         res.render('admin');
+    }
+})
+// app.get('/addadmin',async(req,res)=>{
+    
+//     const hash =await bcrypt.hash("1234",12);
+//     const newadmin=new Admin({
+//         adminname:"ISM-LIB",
+//         password:hash
+//     })
+//     await newadmin.save();
+//     res.send(newadmin);
+// })
+
 
 
 app.get('/allbooks',async(req,res)=>{
@@ -102,19 +173,28 @@ app.post('/librarian/addbook',async(req,res)=>{
        await book.save();
        res.redirect('librarian/addbook');
 })
-
-app.get('/addstudent',async(req,res)=>{
+app.get('/librarian/addnewuser',async(req,res)=>{
+    res.render('librarian/addnewuser')
+})
+app.post('/librarian/addnewuser',async(req,res)=>{
+           const student=req.body;
            const newstudent = new Student({
-                  name:"Srivardhan",
-                  admNo:"21je0517",
-                  phNo:"9392300190",
-                  email:"21je0517@iitism.ac.in",
-                  dep:"Electronics",
+                  name:student.name,
+                  admNo:student.admNo,
+                  phNo:student.phNo,
+                  email:student.email,
+                  dep:student.dep,
                   book:[],
-           
            })
           await newstudent.save();
-           res.send(newstudent);
+          console.log(newstudent);
+          const hash =await bcrypt.hash("1234",12);
+          const newuser=new User({
+            username:student.admNo,
+            password:hash
+          })
+          await newuser.save();
+          res.render('librarian/addnewuser');
 })
 
 

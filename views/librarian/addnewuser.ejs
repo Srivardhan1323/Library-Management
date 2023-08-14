@@ -1,0 +1,22 @@
+    <h1>Create New Account</h1>
+    
+    <form action="/librarian/addnewuser" method="post">
+        <label for="name">StudentName:</label>
+        <input type="text" name="name">
+        <label for="admNo">AdmNo:</label>
+        <input type="text" name="admNo">
+        <label for="phNo">Phone:</label>
+        <input type="text" name="phNo">
+        <label for="email">Email:</label>
+        <input type="email" name="email">
+        <label for="dep"></label>
+        <select name="dep" >
+            <option value="Computer Science">Computer Science</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Mechanical">Mechanical</option>
+            <option value="Civil">Civil</option>
+            <option value="Mining">Mining</option>
+            <option value="Petoleum">Petoleum</option>
+        </select>
+        <button>Addnew</button>   
+    </form>
