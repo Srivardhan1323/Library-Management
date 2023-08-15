@@ -1,5 +1,5 @@
 <%layout('layouts/boilerplate') %>
-
+<%- include('../layouts/librarian.ejs') %>
   <% let count=0; %> 
   <% for(student of allStudents){ %>
         <% if (student.book.length === 0) { %>

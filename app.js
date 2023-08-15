@@ -36,9 +36,12 @@ app.use(session({secret:" "}));
 app.get('/signin',(req,res)=>{
     if(req.session.user_id) 
     {
-        return res.redirect('student/profile');
+        return res.redirect(`student/profile/${req.session.username}`);
     }
-
+    if(req.session.admin_id)
+    {
+        return res.redirect("allbooks");
+    }
     res.render('signin');
 })
 app.post('/signin',async(req,res)=>{
@@ -62,6 +65,14 @@ app.post('/signin',async(req,res)=>{
     }
 })
 app.get('/admin',async (req,res)=>{
+    if(req.session.user_id) 
+    {
+        return res.redirect(`student/profile/${req.session.username}`);
+    }
+    if(req.session.admin_id)
+    {
+        return res.redirect("allbooks");
+    }
     res.render('admin');
 })
 app.post('/admin',async (req,res)=>{
@@ -69,11 +80,9 @@ app.post('/admin',async (req,res)=>{
     const admin=  await Admin.findOne({ adminname });
     if(admin==null)
     {
-        
         return res.send('<script>alert("Incorrect Adminname Or Password"); window.location="/signin";</script>');
         return res.render('admin');
     }
-
     const validpassword= await bcrypt.compare(password,admin.password);
     console.log(validpassword)
     if(validpassword)
@@ -86,6 +95,12 @@ app.post('/admin',async (req,res)=>{
          return res.send('<script>alert("Incorrect Username Or Password"); window.location="/signin";</script>')
          res.render('admin');
     }
+})
+
+app.post('/logout',(req,res)=>{
+    req.session.user_id=null;
+    req.session.admin_id=null;
+    res.redirect('/signin');
 })
 // app.get('/addadmin',async(req,res)=>{
     
@@ -122,6 +137,9 @@ app.get('/student/profile/:id/books', async(req,res)=>{
      
      res.render('student/showBooks',{student});
 })
+app.get('/librarian/issue',async(req,res)=>{
+    res.redirect('../allbooks')
+})
 app.get('/librarian/issue/:title',async(req,res)=>{
     const {title} = req.params;
     res.render('librarian/issue',{title});   
@@ -129,6 +147,11 @@ app.get('/librarian/issue/:title',async(req,res)=>{
 app.post('/librarian/issue',async(req,res)=>{
     const {stuadmNo,booktitle}=req.body;
     const student=await (await Student.findOne({admNo:`${stuadmNo}`}));
+    if(student==null)
+    {
+        return res.send('<script>alert("User not found"); window.location="/signin";</script>')
+        return res.redirect('allbooks');
+    }
     const book=await(await Book.findOne({title:`${booktitle}`}));
     await student.book.push(book)
     book.copies--;
@@ -142,8 +165,7 @@ app.post('/librarian/issue',async(req,res)=>{
     })
     await newIssue.save();
     const id=student.admNo;
-    //res.send(book);
-    res.redirect(`/student/profile/${student.admNo}/books`);
+    res.redirect('../allbooks');
 })
 
 
@@ -206,10 +228,16 @@ app.get('/allbooks',async(req,res)=>{
 
 
 app.get('*',(req,res)=>{
-       res.send('Nothing Matches');
+    if(req.session.user_id) 
+    {
+        return res.redirect(`student/profile/${req.session.username}`);
+    }
+    if(req.session.admin_id)
+    {
+        return res.redirect("allbooks");
+    }
+    res.render('signin');
 })
-
-
 app.listen(3000,()=>{
     console.log('LISTENING AT PORT 3000')
 })
