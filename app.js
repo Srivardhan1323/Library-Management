@@ -142,15 +142,12 @@ app.post('/librarian/issue',async(req,res)=>{
     book.copies--;
     await book.save()
     await student.save()
-    date1=moment().format("YYYY-MM-DD");;
-    console.log(date1);
-    date1=10;
+    const date1=Date.now();
     const newIssue = new Issue({
         student : student,
         book    : book,
         date : date1
     })
-    
     await newIssue.save();
     res.redirect('../allbooks');
 })
@@ -208,6 +205,7 @@ app.post('/librarian/addnewuser',async(req,res)=>{
                   email:student.email,
                   dep:student.dep,
                   book:[],
+                  photo:student.photo
            })
           await newstudent.save();
           console.log(newstudent);
@@ -235,7 +233,7 @@ app.get('*',(req,res)=>{
     }
     if(req.session.admin_id)
     {
-        return res.redirect("allbooks");
+        return res.redirect("/allbooks");
     }
     res.render('signin');
 })

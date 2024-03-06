@@ -19,6 +19,10 @@ const bookSchema=new mongoose.Schema({
     },
     copies:{
         type:Number
+    },
+    photo:{
+        type:String,
+        required:true
     }
 })
 module.exports=mongoose.model('Book',bookSchema);

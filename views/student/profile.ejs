@@ -1,10 +1,11 @@
 <% layout('layouts/boilerplate') %>
 <%- include('../layouts/student.ejs') %>
-
+<img src="<%= student.photo %>" alt="" width="200" height="200">
 <h1>Name : <%=student.name%></h3>
 <h3>admnNo : <%= student.admNo %></h3>
 <h3>Phno  : <%= student.phNo %></h3>
 <h3>Email  : <%= student.email %></h3>
 <h3>Department : <%= student.dep %> and Engineering</h3>
+
 
 

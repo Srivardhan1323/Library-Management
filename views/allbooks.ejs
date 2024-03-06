@@ -5,6 +5,7 @@
     <% if (book.copies!=0) { %>
         <h2><%=book.title%></h2>
         <ul>
+          <img src="<%= book.photo %>" alt="" width="150" height="200">
            <li> <h4><%=book.author%></h4></li>
            <li> <h4><%=book.genre%></h4></li>
            <li> <h4><%=book.yop%></h4></li>

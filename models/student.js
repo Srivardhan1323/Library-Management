@@ -34,7 +34,11 @@ const studentSchema=new mongoose.Schema({
         ref:'Book',
         required:true
         }
-   ]
+   ],
+   photo:{
+          type:String,
+          required:true
+   }
 })
 
 module.exports=mongoose.model('Student',studentSchema)

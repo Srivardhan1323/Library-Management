@@ -5,6 +5,7 @@
   <% }else{ %>  
            <h1>Total books taken : <%= student.book.length %></h1>
                <% for(book of student.book){ %>
+                   <img src="<%= book.photo %>" alt="" width="150" height="200">
                    <h2><%=book.title%></h2>
                         <ul>
                                 <li> <h4>Author:<%=book.author%></h4></li>

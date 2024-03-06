@@ -9,6 +9,7 @@
             <h1><%=student.name%> </h1>
             <ul>
               <% student.book.forEach(book => { %>
+                <img src="<%= book.photo %>" alt="" width="150" height="200">
                 <li><%= book.title %> by <%= book.author %></li>
                 <form action="/librarian/return/<%=student._id %>/<%=book._id%>?_method=DELETE" method="POST"><button>Return</button></form>
               <% }) %>
