@@ -1,6 +1,6 @@
 
 <%- include('../layouts/librarian.ejs') %>
-<form action="/addbook" method="post">
+<form action="/librarian/addbook" method="post">
     <label for="title">BookTitle</label>
     <input type="text" name="title">
     <label for="author">BookAuthor</label>
@@ -21,7 +21,5 @@
     <input type="number" name="yop" id="">
     <label for="copies" >Copies</label>
     <input type="number" min="1" name="copies">
-    <label for="copies">No.of Copies</label>
-    <input type="number" name="copies" id="copies" min="1">
     <button>Add book</button>
 </form>

@@ -1,0 +1,16 @@
+<%- include('../layouts/librarian.ejs') %>
+<% diff=Math.ceil((Date.now()-temp.date)/(1000*60*60*24)) %>
+<% if (diff<=10) { %>
+    <h3>Thank you for returning your book,</h3>
+    <h4>Happy reading, and thank you for being a valued member of our library community!</h4>
+<% } else { %>
+    <h1>No of days :<%=diff %></h1>
+    <h3>Fine per day:10</h3>
+    <h3>No of overdue days:<%=diff-10%></h3>
+    <h2>Amount of fine to be paid:<%=(diff-10)*10%></h2>
+   
+    <form action="/librarian/upi" method="get">
+        <button>Pay Using UPI</button>
+    </form>
+<% } %>
+ 

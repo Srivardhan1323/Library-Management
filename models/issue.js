@@ -12,9 +12,9 @@ const issueSchema=new mongoose.Schema({
         ref:"Book",
         required:true
     },
-    returned:{
-        type:Boolean,
-        default:false
+    date:{
+        type:Number,
+        required:true
     }
    
 })

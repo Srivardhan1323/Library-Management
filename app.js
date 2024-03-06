@@ -64,6 +64,7 @@ app.post('/signin',async(req,res)=>{
          res.render('signin');
     }
 })
+
 app.get('/admin',async (req,res)=>{
     if(req.session.user_id) 
     {
@@ -84,7 +85,6 @@ app.post('/admin',async (req,res)=>{
         return res.render('admin');
     }
     const validpassword= await bcrypt.compare(password,admin.password);
-    console.log(validpassword)
     if(validpassword)
     {
             req.session.admin_id= admin._id;
@@ -102,18 +102,6 @@ app.post('/logout',(req,res)=>{
     req.session.admin_id=null;
     res.redirect('/signin');
 })
-// app.get('/addadmin',async(req,res)=>{
-    
-//     const hash =await bcrypt.hash("1234",12);
-//     const newadmin=new Admin({
-//         adminname:"ISM-LIB",
-//         password:hash
-//     })
-//     await newadmin.save();
-//     res.send(newadmin);
-// })
-
-
 
 app.get('/allbooks',async(req,res)=>{
         const allbooks = await Book.find({});
@@ -123,20 +111,17 @@ app.get('/allbooks',async(req,res)=>{
 
 app.get('/student/profile/:id',async(req,res)=>{
          const {id} = req.params;
-
-        const student = await (await Student.findOne({admNo:`${id}`})).populate('book');
-         
+         const student = await (await Student.findOne({admNo:`${id}`})).populate('book');         
          res.render('student/profile',{student});
-     
 })
 
 app.get('/student/profile/:id/books', async(req,res)=>{
-    const {id} = req.params;
-
-    const student = await (await Student.findOne({admNo:`${id}`})).populate('book');
-     
+     const {id} = req.params;
+     const student = await (await Student.findOne({admNo:`${id}`})).populate('book'); 
      res.render('student/showBooks',{student});
 })
+
+
 app.get('/librarian/issue',async(req,res)=>{
     res.redirect('../allbooks')
 })
@@ -157,37 +142,52 @@ app.post('/librarian/issue',async(req,res)=>{
     book.copies--;
     await book.save()
     await student.save()
-   
+    date1=moment().format("YYYY-MM-DD");;
+    console.log(date1);
+    date1=10;
     const newIssue = new Issue({
         student : student,
         book    : book,
-        returned : false
+        date : date1
     })
+    
     await newIssue.save();
-    const id=student.admNo;
     res.redirect('../allbooks');
 })
 
 
 app.get('/librarian/return',async(req,res)=>{
         const allStudents = await Student.find({}).populate('book');
-
         res.render('librarian/return',{allStudents});
 })
-
+app.get('/librarian/return/:student/:book_id',async (req,res)=>{
+    const {student,book_id} = req.params;  
+    const temp=await Issue.findOne({student:student,book:book_id});
+    res.redirect('/librarian/fine',{temp});
+})
+app.get('librarian/fine',async (req,res)=>{
+    res.render('librarian/fine');
+})
+app.get('/librarian/upi' ,async (req,res)=>{
+     res.render('librarian/upi');
+})
+app.get('/librarian/success',async(req,res)=>{
+    res.redirect('../allbooks');
+})
 app.delete('/librarian/return/:student/:book_id',async(req,res)=>{
       const {student,book_id} = req.params;
       const st = await Student.findOne({_id:student});
       const book=await Book.findOne({_id:book_id});
       const index = st.book.indexOf(book_id);
+      const temp=await Issue.findOne({student:student,book:book_id});
       st.book.splice(index, 1);
       book.copies++;
       await book.save();
       await st.save();
-      res.redirect('/librarian/return');
-})
-app.get('/librarian/addbook',async(req,res)=>{
-    
+      res.render('librarian/fine',{temp});
+}) 
+
+app.get('/librarian/addbook',async(req,res)=>{ 
     res.render('librarian/addbook');
 })
 app.post('/librarian/addbook',async(req,res)=>{
@@ -195,6 +195,7 @@ app.post('/librarian/addbook',async(req,res)=>{
        await book.save();
        res.redirect('librarian/addbook');
 })
+
 app.get('/librarian/addnewuser',async(req,res)=>{
     res.render('librarian/addnewuser')
 })
@@ -238,6 +239,8 @@ app.get('*',(req,res)=>{
     }
     res.render('signin');
 })
+
+
 app.listen(3000,()=>{
     console.log('LISTENING AT PORT 3000')
 })
