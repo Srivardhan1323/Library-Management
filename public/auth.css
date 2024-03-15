@@ -1,0 +1,41 @@
+body{
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh; 
+    font-family:'Times New Roman', serif;
+    background-color: rgb(255, 255, 255)
+}
+.sign-in{
+    width: 350px;
+    padding: 1%;
+    border:1px solid rgb(255, 255, 255) ;
+    box-shadow:  0 8px 16px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.header{
+    display: flex;
+    text-align: center;
+    width: 100%;
+}
+.header img{
+    height:60px;
+    width: 50px;
+    padding-right: 3px;
+}
+.alert{
+    justify-content: center; 
+    align-items: center; 
+    width: 100%;
+}
+
+.holder input {
+    margin-bottom: 10px;
+    width: 100%;
+}
+.submit{
+    margin-top: 10px;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    width:100%
+}

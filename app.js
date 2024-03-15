@@ -32,7 +32,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
 app.use(session({secret:" "}));
 
-
+app.use(express.static('public'));
 app.get('/signin',(req,res)=>{
     if(req.session.user_id) 
     {
